@@ -1,7 +1,7 @@
 <?php namespace text\sql;
 
 use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values};
-use text\sql\statement\{CreateTable, AlterTable, DropTable, Column};
+use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
 use text\sql\statement\{Select, Insert, Update, Delete, UseDatabase};
 
@@ -221,6 +221,35 @@ class Parser {
 
           $parse->expect(')');
           return new CreateTable($table, $columns);
+        }
+      ]);
+    };
+
+    $this->symbol('alter')->nud= function($parse, $token) {
+      return $parse->match([
+        'table' => function($parse, $token) {
+          $table= $parse->token->value;
+          $parse->forward();
+
+          return new AlterTable($table, $parse->match([
+            'add' => function($parse, $token) {
+              $name= $parse->token->value;
+              $parse->forward();
+
+              $type= $parse->token->value;
+              $parse->forward();
+
+              if ('(' === $parse->token->value) {
+                $parse->forward();
+                $size= $parse->token->value;
+                $parse->forward();
+                $parse->expect(')');
+              } else {
+                $size= null;
+              }
+              return new AddColumn(new Column($name, $type, $size));
+            }
+          ]));
         }
       ]);
     };
