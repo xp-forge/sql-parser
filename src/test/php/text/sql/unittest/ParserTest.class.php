@@ -53,8 +53,23 @@ class ParserTest {
   }
 
   #[Test]
-  public function comments() {
-    Assert::equals([new UseDatabase('test')], (new Parser())->parse('use test -- the west')->tree());
+  public function comment() {
+    Assert::equals(
+      [new UseDatabase('test')],
+      (new Parser())->parse('use test -- the west')->tree()
+    );
+  }
+
+  #[Test]
+  public function comment_between_lines() {
+    $sql= trim('
+      select name -- The username
+      from user
+    ');
+    Assert::equals(
+      [new Select([new Field(null, 'name')], [new Table('user')])],
+      (new Parser())->parse($sql)->tree()
+    );
   }
 
   #[Test, Values('show')]
