@@ -24,3 +24,14 @@ $statement= $p->parse('select * from user where user_id = 1');
 //   new Comparison(new Field(null, 'uid'), '=', new Number(1))
 // )
 ```
+
+Parses
+------
+This library is not yet complete. Currently, the following are supported:
+
+* USE database selection
+* SELECT, INSERT, UPDATE and DELETE statements
+* CREATE / DROP TABLE schema modification
+* ALTER TABLE ADD / DROP COLUMN table modification
+
+Other statements may be added via `extend()`.
