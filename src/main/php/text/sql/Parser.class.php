@@ -231,6 +231,9 @@ class Parser {
     };
 
     $this->symbol('values')->nud= function($parse, $token) {
+      $list= [];
+
+      values:
       $values= [];
       $parse->expect('(');
       while (')' !== $parse->token->value) {
@@ -242,7 +245,14 @@ class Parser {
         // TODO: Parse error
       }
       $parse->expect(')');
-      return new Values($values);
+      $list[]= $values;
+
+      if (',' === $parse->token->value) {
+        $parse->forward();
+        goto values;
+      }
+
+      return new Values(...$list);
     };
 
     $this->symbol('create')->nud= function($parse, $token) {

@@ -16,6 +16,11 @@ class InsertTest extends StatementTest {
       [],
       new Values([new Number(1), new Text('test')])
     )];
+    yield ['insert into user values (1, "test"), (2, "works")', new Insert(
+      new Table('user'),
+      [],
+      new Values([new Number(1), new Text('test')], [new Number(2), new Text('works')])
+    )];
     yield ['insert into test.user values (1, "test")', new Insert(
       new Table('test.user'),
       [],

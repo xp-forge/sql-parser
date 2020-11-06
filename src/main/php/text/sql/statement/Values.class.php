@@ -3,7 +3,7 @@
 class Values {
   public $list;
 
-  public function __construct($list) {
+  public function __construct(...$list) {
     $this->list= $list;
   }
 
