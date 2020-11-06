@@ -33,6 +33,9 @@ class SelectTest extends StatementTest {
     yield ['select * from user order by created', (new Select([new All()], [new Table('user')]))->order([
       new Order(new Field(null, 'created'), null)
     ])];
+    yield ['select * from user order by rand()', (new Select([new All()], [new Table('user')]))->order([
+      new Order(new Call('rand', []), null)
+    ])];
     yield ['select * from user order by created asc', (new Select([new All()], [new Table('user')]))->order([
       new Order(new Field(null, 'created'), Order::ASCENDING)
     ])];
