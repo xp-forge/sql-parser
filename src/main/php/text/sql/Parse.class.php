@@ -76,8 +76,11 @@ class Parse {
    */
   public function match($cases) {
     $t= $this->token;
-    if (null === ($f= $cases[$t->value])) {
-      throw new SyntaxError('Expecting one of '.implode(', ', array_keys($cases)).', have '.$this->token->name());
+    if (null === ($f= $cases[$t->value] ?? null)) {
+      $tokens= array_keys($cases);
+      $last= array_pop($tokens);
+      $expected= empty($tokens) ? $last : 'one of '.implode(', ', $tokens).' or '.$last;
+      throw new SyntaxError('Expecting '.$expected.', have '.$t->name());
     }
 
     $this->forward();

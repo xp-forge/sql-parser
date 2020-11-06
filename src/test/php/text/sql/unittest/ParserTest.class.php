@@ -103,6 +103,11 @@ class ParserTest {
     (new Parser())->parse('insert into user')->tree();
   }
 
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting one of add or drop, have select')]
+  public function unmatched_case() {
+    (new Parser())->parse('alter table user select')->tree();
+  }
+
   #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting set, have name')]
   public function update_without_set() {
     (new Parser())->parse('update user name = "test"')->tree();
