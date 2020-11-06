@@ -1,0 +1,18 @@
+{
+  "name" : "xp-forge/sql-parser",
+  "type" : "library",
+  "homepage" : "http://xp-framework.net/",
+  "license" : "BSD-3-Clause",
+  "description" : "SQL Parser",
+  "keywords": ["module", "xp"],
+  "require" : {
+    "xp-framework/core": "^10.2",
+    "php" : ">=7.0.0"
+  },
+  "require-dev" : {
+    "xp-framework/unittest": "^11.1"
+  },
+  "autoload" : {
+    "files" : ["src/main/php/autoload.php"]
+  }
+}
