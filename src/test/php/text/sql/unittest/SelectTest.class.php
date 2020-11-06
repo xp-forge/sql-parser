@@ -21,8 +21,6 @@ class SelectTest extends StatementTest {
     yield ['select u.* from user u', new Select([new All('u')], [new Table('user', 'u')])];
     yield ['select name, * from user', new Select([new Field(null, 'name'), new All()], [new Table('user')])];
     yield ['select uid as id from user', new Select([new Alias(new Field(null, 'uid'), 'id')], [new Table('user')])];
-    yield ['select count(*) from user', new Select([new Call('count', [new All()])], [new Table('user')])];
-    yield ['select count(u.*) from user u', new Select([new Call('count', [new All('u')])], [new Table('user', 'u')])];
 
     // Limit
     yield ['select null limit 1', (new Select([new Literal(null)]))->limit(1)];
