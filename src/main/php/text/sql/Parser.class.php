@@ -1,7 +1,7 @@
 <?php namespace text\sql;
 
 use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values};
-use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, Column};
+use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
 use text\sql\statement\{Select, Insert, Update, Delete, UseDatabase};
 
@@ -233,21 +233,34 @@ class Parser {
 
           return new AlterTable($table, $parse->match([
             'add' => function($parse, $token) {
-              $name= $parse->token->value;
-              $parse->forward();
+              return $parse->match([
+                'column' => function($parse, $token) {
+                  $name= $parse->token->value;
+                  $parse->forward();
 
-              $type= $parse->token->value;
-              $parse->forward();
+                  $type= $parse->token->value;
+                  $parse->forward();
 
-              if ('(' === $parse->token->value) {
-                $parse->forward();
-                $size= $parse->token->value;
-                $parse->forward();
-                $parse->expect(')');
-              } else {
-                $size= null;
-              }
-              return new AddColumn(new Column($name, $type, $size));
+                  if ('(' === $parse->token->value) {
+                    $parse->forward();
+                    $size= $parse->token->value;
+                    $parse->forward();
+                    $parse->expect(')');
+                  } else {
+                    $size= null;
+                  }
+                  return new AddColumn(new Column($name, $type, $size));
+                }
+              ]);
+            },
+            'drop' => function($parse, $token) {
+              return $parse->match([
+                'column' => function($parse, $token) {
+                  $name= $parse->token->value;
+                  $parse->forward();
+                  return new DropColumn($name);
+                }
+              ]);
             }
           ]));
         }
