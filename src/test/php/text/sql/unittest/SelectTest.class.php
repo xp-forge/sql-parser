@@ -64,6 +64,11 @@ class SelectTest extends StatementTest {
       [new Table('user')],
       new Comparison(new Field(null, 'uid'), '=', new Number(1))
     )];
+    yield ['select * from user where uid in (1, 2)', new Select(
+      [new All()],
+      [new Table('user')],
+      new Comparison(new Field(null, 'uid'), 'in', [new Number(1), new Number(2)])
+    )];
     yield ['select * from user where created < now()', new Select(
       [new All()],
       [new Table('user')],

@@ -446,6 +446,22 @@ class Parser {
       }
       return new Comparison($left, $op, $parse->expression(40));
     };
+    $this->symbol('in', 40)->led= function($parse, $token, $left) {
+      $parse->expect('(');
+      $list= [];
+
+      while (')' !== $parse->token->value) {
+        $list[]= $parse->expression(40);
+        if (',' === $parse->token->value) {
+          $parse->forward();
+          continue;
+        }
+        // TODO: Parse error
+      }
+
+      $parse->expect(')');
+      return new Comparison($left, 'in', $list);
+    };
   
     // Binary operations
     $this->symbol('+', 50)->led= function($parse, $token, $left) {
