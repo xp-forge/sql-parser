@@ -4,6 +4,7 @@ class Select extends Expression {
   public $values, $sources, $condition;
   public $limit= null;
   public $order= null;
+  public $group= null;
 
   public function __construct($values, $sources= [], $condition= null) {
     $this->values= $values;
@@ -18,6 +19,11 @@ class Select extends Expression {
 
   public function order($by) {
     $this->order= $by;
+    return $this;
+  }
+
+  public function group($by) {
+    $this->group= $by;
     return $this;
   }
 

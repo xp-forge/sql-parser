@@ -13,6 +13,7 @@ class Parser {
     $this->symbol('asc');
     $this->symbol('desc');
     $this->symbol('from');
+    $this->symbol('group');
     $this->symbol('into');
     $this->symbol('limit');
     $this->symbol('not');
@@ -86,13 +87,13 @@ class Parser {
 
       $select= new Select($fields, $sources, $condition);
 
-      // [ORDER BY column [ASC|DESC], ...} 
-      if ('order' === $parse->token->symbol->id) {
+      // [GROUP BY {col_name | expr | position} [ASC | DESC], ... ]
+      if ('group' === $parse->token->symbol->id) {
         $parse->forward();
         $parse->expect('by');
 
         $by= [];
-        column:
+        group:
         $expr= $parse->expression();
 
         if ('asc' === $parse->token->symbol->id) {
@@ -108,7 +109,34 @@ class Parser {
 
         if (',' === $parse->token->value) {
           $parse->forward();
-          goto column;
+          goto group;
+        }
+        $select->group($by);
+      }
+
+      // [ORDER BY {col_name | expr | position} [ASC | DESC], ...]
+      if ('order' === $parse->token->symbol->id) {
+        $parse->forward();
+        $parse->expect('by');
+
+        $by= [];
+        order:
+        $expr= $parse->expression();
+
+        if ('asc' === $parse->token->symbol->id) {
+          $order= Order::ASCENDING;
+          $parse->forward();
+        } else if ('desc' === $parse->token->symbol->id) {
+          $order= Order::DESCENDING;
+          $parse->forward();
+        } else {
+          $order= null;
+        }
+        $by[]= new Order($expr, $order);
+
+        if (',' === $parse->token->value) {
+          $parse->forward();
+          goto order;
         }
         $select->order($by);
       }

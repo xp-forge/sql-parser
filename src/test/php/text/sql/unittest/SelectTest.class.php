@@ -30,21 +30,34 @@ class SelectTest extends StatementTest {
     yield ['select null limit 10 offset 1', (new Select([new Literal(null)]))->limit(1, 10)];
 
     // Order by
-    yield ['select * from user order by created', (new Select([new All()], [new Table('user')]))->order([
+    $select= (new Select([new All()], [new Table('user')]));
+    yield ['select * from user order by created', $select->order([
       new Order(new Field(null, 'created'), null)
     ])];
-    yield ['select * from user order by rand()', (new Select([new All()], [new Table('user')]))->order([
+    yield ['select * from user order by rand()', $select->order([
       new Order(new Call('rand', []), null)
     ])];
-    yield ['select * from user order by created asc', (new Select([new All()], [new Table('user')]))->order([
+    yield ['select * from user order by created asc', $select->order([
       new Order(new Field(null, 'created'), Order::ASCENDING)
     ])];
-    yield ['select * from user order by created desc', (new Select([new All()], [new Table('user')]))->order([
+    yield ['select * from user order by created desc', $select->order([
       new Order(new Field(null, 'created'), Order::DESCENDING)
     ])];
-    yield ['select * from user order by created, name', (new Select([new All()], [new Table('user')]))->order([
+    yield ['select * from user order by created, name', $select->order([
       new Order(new Field(null, 'created'), null),
       new Order(new Field(null, 'name'), null)
+    ])];
+
+    // Group by
+    $select= (new Select([new Field(null, 'status'), new Call('count', [new All()])], [new Table('user')]));
+    yield ['select status, count(*) from user group by status', $select->group([
+      new Order(new Field(null, 'status'), null)
+    ])];
+    yield ['select status, count(*) from user group by status asc', $select->group([
+      new Order(new Field(null, 'status'), Order::ASCENDING)
+    ])];
+    yield ['select status, count(*) from user group by status desc', $select->group([
+      new Order(new Field(null, 'status'), Order::DESCENDING)
     ])];
 
     // Selects with WHERE clause
