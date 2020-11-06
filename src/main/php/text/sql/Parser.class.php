@@ -10,6 +10,7 @@ class Parser {
 
   public function __construct() {
     $this->symbol('as');
+    $this->symbol('by');
     $this->symbol('asc');
     $this->symbol('desc');
     $this->symbol('from');
