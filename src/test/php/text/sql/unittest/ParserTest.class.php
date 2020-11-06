@@ -12,6 +12,7 @@ class ParserTest {
   /** @return iterable */
   private function statements() {
     yield ['use test', new UseDatabase('test')];
+    yield ['use test -- The best database', new UseDatabase('test')];
 
     // Basic selects
     yield ['select 1', new Select([new Number(1)])];

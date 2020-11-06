@@ -22,18 +22,20 @@ class Parse {
    */
   public function forward() {
     while ($this->tokens->valid()) {
+      $key= $this->tokens->key();
       $token= $this->tokens->current();
 
       // Do not lowercase quoted identifiers, rewriting them as names
-      $key= $this->tokens->key();
+      $this->tokens->next();
       if ('identifier' === $key) {
         $symbol= $this->rules->symbol('name');
+      } else if ('comment' === $key) {
+        continue;
       } else {
         $symbol= $this->rules->symbols[strtolower($token[0])] ?? $this->rules->symbol($key);
       }
 
       // echo '<< ', $symbol->id, ' (', $token[0], ")\n";
-      $this->tokens->next();
       $this->token= new Token($symbol, ...$token);
       return;
     }
