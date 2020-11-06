@@ -31,7 +31,7 @@ class UpdateTest extends StatementTest {
       new AllOf(
         new Comparison(new Field(null, 'uid'), '=', new Number(1)),
         new Comparison(new Field(null, 'status'), '!=', new Text('deleted'))
-      ),
+      )
     )];
   }
 }
