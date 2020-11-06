@@ -3,6 +3,7 @@
 class Select extends Expression {
   public $values, $sources, $condition;
   public $limit= null;
+  public $order= null;
 
   public function __construct($values, $sources= [], $condition= null) {
     $this->values= $values;
@@ -12,6 +13,11 @@ class Select extends Expression {
 
   public function limit($offset, $count= null) {
     $this->limit= [$offset, $count];
+    return $this;
+  }
+
+  public function order($by) {
+    $this->order= $by;
     return $this;
   }
 

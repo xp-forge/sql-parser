@@ -1,6 +1,6 @@
 <?php namespace text\sql;
 
-use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values};
+use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values, Order};
 use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
 use text\sql\statement\{Select, Insert, Update, Delete, UseDatabase};
@@ -10,11 +10,14 @@ class Parser {
 
   public function __construct() {
     $this->symbol('as');
+    $this->symbol('asc');
+    $this->symbol('desc');
     $this->symbol('from');
     $this->symbol('into');
     $this->symbol('limit');
     $this->symbol('not');
     $this->symbol('offset');
+    $this->symbol('order');
     $this->symbol('values');
     $this->symbol('where');
 
@@ -82,6 +85,33 @@ class Parser {
       }
 
       $select= new Select($fields, $sources, $condition);
+
+      // [ORDER BY column [ASC|DESC], ...} 
+      if ('order' === $parse->token->symbol->id) {
+        $parse->forward();
+        $parse->expect('by');
+
+        $by= [];
+        column:
+        $expr= $parse->expression();
+
+        if ('asc' === $parse->token->symbol->id) {
+          $order= Order::ASCENDING;
+          $parse->forward();
+        } else if ('desc' === $parse->token->symbol->id) {
+          $order= Order::DESCENDING;
+          $parse->forward();
+        } else {
+          $order= null;
+        }
+        $by[]= new Order($expr, $order);
+
+        if (',' === $parse->token->value) {
+          $parse->forward();
+          goto column;
+        }
+        $select->order($by);
+      }
 
       // [LIMIT {[offset,] row_count | row_count OFFSET offset}]
       if ('limit' === $parse->token->symbol->id) {

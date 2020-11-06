@@ -1,7 +1,7 @@
 <?php namespace text\sql\unittest;
 
 use text\sql\statement\{Comparison, AllOf, EitherOf};
-use text\sql\statement\{Select, Call, Number, Text, Field, Literal, Table, Alias, All, Variable, System};
+use text\sql\statement\{Select, Call, Number, Text, Field, Literal, Table, Alias, All, Variable, System, Order};
 
 class SelectTest extends StatementTest {
 
@@ -28,6 +28,21 @@ class SelectTest extends StatementTest {
     yield ['select null limit 1', (new Select([new Literal(null)]))->limit(1)];
     yield ['select null limit 1, 10', (new Select([new Literal(null)]))->limit(1, 10)];
     yield ['select null limit 10 offset 1', (new Select([new Literal(null)]))->limit(1, 10)];
+
+    // Order by
+    yield ['select * from user order by created', (new Select([new All()], [new Table('user')]))->order([
+      new Order(new Field(null, 'created'), null)
+    ])];
+    yield ['select * from user order by created asc', (new Select([new All()], [new Table('user')]))->order([
+      new Order(new Field(null, 'created'), Order::ASCENDING)
+    ])];
+    yield ['select * from user order by created desc', (new Select([new All()], [new Table('user')]))->order([
+      new Order(new Field(null, 'created'), Order::DESCENDING)
+    ])];
+    yield ['select * from user order by created, name', (new Select([new All()], [new Table('user')]))->order([
+      new Order(new Field(null, 'created'), null),
+      new Order(new Field(null, 'name'), null)
+    ])];
 
     // Selects with WHERE clause
     yield ['select * from user where uid = 1', new Select(
