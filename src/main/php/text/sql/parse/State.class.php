@@ -71,7 +71,7 @@ class State {
   /**
    * Matches token values
    *
-   * @param  [:(function(self, text.sql.Tolen): var)] $cases
+   * @param  [:(function(self, text.sql.parse.Token): var)] $cases
    * @return var
    */
   public function match($cases) {

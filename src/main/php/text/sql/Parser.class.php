@@ -507,7 +507,7 @@ class Parser {
    * Extend this parser to parse a given keyword with a function
    *
    * @param  string $keyword
-   * @param  function(text.sql.Parse, text.sql.Token): var
+   * @param  function(text.sql.parse.State, text.sql.parse.Token): var
    * @return self
    */
   public function extend($keyword, $function) {
@@ -518,7 +518,7 @@ class Parser {
   /**
    * Parse a given argument
    *
-   * @param  io.streams.InputStream|io.File|io.Path|string|text.sql.Tokens $arg
+   * @param  io.streams.InputStream|io.File|io.Path|string|text.sql.parse.Tokens $arg
    * @return text.sql.parse.State
    */
   public function parse($arg) {
