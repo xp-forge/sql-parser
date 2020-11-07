@@ -2,7 +2,6 @@
 
 use io\streams\{InputStream, MemoryInputStream};
 use io\{Path, File};
-use lang\FormatException;
 
 /**
  * Tokenize code.
@@ -95,7 +94,7 @@ class Tokens implements \IteratorAggregate {
         do {
           $chunk= $next($end);
           if (null === $chunk) {
-            throw new FormatException('Unclosed string literal starting at line '.$line);
+            throw new UnclosedString('Unclosed string literal starting on line '.$line);
           } else if ('\\' === $chunk) {
             $string.= $chunk.$next($end);
           } else {

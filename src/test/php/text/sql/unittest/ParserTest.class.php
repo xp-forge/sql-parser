@@ -122,4 +122,9 @@ class ParserTest {
   public function missing_semicolon_between_two_statements() {
     (new Parser())->parse('select 1 select 2')->tree();
   }
+
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Unclosed string literal starting on line 1')]
+  public function unclosed_string() {
+    (new Parser())->parse('select * from user where name = "Test')->tree();
+  }
 }
