@@ -23,7 +23,7 @@ class SelectTest extends StatementTest {
     yield ['select uid as id from user', new Select([new Alias(new Field(null, 'uid'), 'id')], [new Table('user')])];
 
     // Limit
-    yield ['select null limit 1', (new Select([new Literal(null)]))->limit(1)];
+    yield ['select null limit 10', (new Select([new Literal(null)]))->limit(1, 10)];
     yield ['select null limit 1, 10', (new Select([new Literal(null)]))->limit(1, 10)];
     yield ['select null limit 10 offset 1', (new Select([new Literal(null)]))->limit(1, 10)];
 

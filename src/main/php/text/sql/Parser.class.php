@@ -179,7 +179,7 @@ class Parser {
           $parse->forward();
           $select->limit($value, $parse->value());
         } else {
-          $select->limit($value);
+          $select->limit(1, $value);
         }
       }
 
