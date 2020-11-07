@@ -93,32 +93,32 @@ class ParserTest {
     Assert::equals([$result], $fixture->parse($sql)->tree());
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting a name, have .')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting a name, have . on line 1')]
   public function triple_dot_not_allowed_in_table() {
     (new Parser())->parse('select * from test...user')->tree();
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting values or select, have (eof)')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting values or select, have (eof) on line 1')]
   public function insert_without_values_or_select() {
     (new Parser())->parse('insert into user')->tree();
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting one of add or drop, have select')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting one of add or drop, have select on line 1')]
   public function unmatched_case() {
     (new Parser())->parse('alter table user select')->tree();
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting set, have name')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting set, have name on line 1')]
   public function update_without_set() {
     (new Parser())->parse('update user name = "test"')->tree();
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting from, have user')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting from, have user on line 1')]
   public function delete_without_from() {
     (new Parser())->parse('delete user')->tree();
   }
 
-  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting ; or (eof), have select')]
+  #[Test, Expect(class: SyntaxError::class, withMessage: 'Expecting ; or (eof), have select on line 1')]
   public function missing_semicolon_between_two_statements() {
     (new Parser())->parse('select 1 select 2')->tree();
   }

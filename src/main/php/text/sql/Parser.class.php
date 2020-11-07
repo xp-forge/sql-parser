@@ -1,6 +1,6 @@
 <?php namespace text\sql;
 
-use text\sql\parse\{State, Tokens, Symbol};
+use text\sql\parse\{State, Tokens, Symbol, Expecting};
 use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values, Order};
 use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
@@ -185,7 +185,7 @@ class Parser {
       if ('values' === $parse->token->symbol->id || 'select' === $parse->token->symbol->id) {
         $source= $parse->expression();
       } else {
-        throw new SyntaxError('Expecting values or select, have '.$parse->token->name());
+        throw new Expecting('values or select', $parse->token);
       }
 
       return new Insert($target, $columns, $source);

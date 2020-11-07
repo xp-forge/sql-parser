@@ -12,6 +12,6 @@ class Expecting extends SyntaxError {
       $expecting= $tokens;
     }
 
-    parent::__construct('Expecting '.$expecting.', have '.$actual->name());
+    parent::__construct('Expecting '.$expecting.', have '.$actual->name().' on line '.$actual->line);
   }
 }
