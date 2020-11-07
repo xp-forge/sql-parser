@@ -1,4 +1,4 @@
-<?php namespace text\sql;
+<?php namespace text\sql\parse;
 
 use io\streams\{InputStream, MemoryInputStream};
 use io\{Path, File};

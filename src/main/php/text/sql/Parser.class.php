@@ -1,5 +1,6 @@
 <?php namespace text\sql;
 
+use text\sql\parse\{State, Tokens, Symbol, SyntaxError};
 use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values, Order};
 use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
@@ -487,7 +488,7 @@ class Parser {
    *
    * @param  string $id
    * @param  int $lbp
-   * @return text.sql.Symbol
+   * @return text.sql.parse.Symbol
    */
   public function symbol($id, $lbp= 0) {
     if (isset($this->symbols[$id])) {
@@ -518,9 +519,9 @@ class Parser {
    * Parse a given argument
    *
    * @param  io.streams.InputStream|io.File|io.Path|string|text.sql.Tokens $arg
-   * @return text.sql.Parse
+   * @return text.sql.parse.State
    */
   public function parse($arg) {
-    return new Parse($this, $arg instanceof Tokens ? $arg : new Tokens($arg));
+    return new State($this, $arg instanceof Tokens ? $arg : new Tokens($arg));
   }
 }

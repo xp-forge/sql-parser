@@ -1,4 +1,4 @@
-<?php namespace text\sql;
+<?php namespace text\sql\parse;
 
 use lang\IllegalStateException;
 

@@ -1,6 +1,6 @@
-<?php namespace text\sql;
+<?php namespace text\sql\parse;
 
-class Parse {
+class State {
   private $tokens, $rules;
   public $token;
 
@@ -71,7 +71,7 @@ class Parse {
   /**
    * Matches token values
    *
-   * @param  [:(function(text.sql.Parse, text.sql.Tolen): var)] $cases
+   * @param  [:(function(self, text.sql.Tolen): var)] $cases
    * @return var
    */
   public function match($cases) {
@@ -162,7 +162,7 @@ class Parse {
     }
   }
 
-  /** @return var[] */
+  /** @return text.sql.statement.Expression[] */
   public function tree() {
     $this->forward();
     $r= [];
