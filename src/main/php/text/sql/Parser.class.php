@@ -1,6 +1,6 @@
 <?php namespace text\sql;
 
-use text\sql\parse\{State, Tokens, Symbol, SyntaxError};
+use text\sql\parse\{State, Tokens, Symbol};
 use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values, Order};
 use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
 use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};

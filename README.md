@@ -13,8 +13,7 @@ Examples
 --------
 
 ```php
-use text\sql\Parser;
-use text\sql\parse\SyntaxError;
+use text\sql\{Parser, SyntaxError};
 
 $p= new Parser();
 try {

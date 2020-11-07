@@ -52,7 +52,7 @@ class State {
    */
   public function expect($token) {
     if ($token !== $this->token->value) {
-      throw new SyntaxError('Expecting '.$token.', have '.$this->token->name());
+      throw new Expecting('Expecting '.$token.', have '.$this->token->name());
     }
     $this->forward();
   }
@@ -73,6 +73,7 @@ class State {
    *
    * @param  [:(function(self, text.sql.parse.Token): var)] $cases
    * @return var
+   * @throws text.sql.SyntaxError
    */
   public function match($cases) {
     $t= $this->token;
@@ -80,7 +81,7 @@ class State {
       $tokens= array_keys($cases);
       $last= array_pop($tokens);
       $expected= empty($tokens) ? $last : 'one of '.implode(', ', $tokens).' or '.$last;
-      throw new SyntaxError('Expecting '.$expected.', have '.$t->name());
+      throw new Expecting('Expecting '.$expected.', have '.$t->name());
     }
 
     $this->forward();
@@ -96,7 +97,7 @@ class State {
     $name= '';
     do {
       if ('name' !== $this->token->symbol->id) {
-        throw new SyntaxError('Expecting a name, have '.$this->token->name());
+        throw new Expecting('Expecting a name, have '.$this->token->name());
       }
 
       $name.= $this->token->value;
@@ -148,7 +149,7 @@ class State {
     if (';' === $this->token->value) {
       $this->forward();
     } else if (null !== $this->token->value) {
-      throw new SyntaxError('Expecting ; or (eof), have '.$this->token->name());
+      throw new Expecting('Expecting ; or (eof), have '.$this->token->name());
     }
     return $expr;
   }

@@ -1,8 +1,7 @@
 <?php namespace text\sql\unittest;
 
-use text\sql\Parser;
-use text\sql\parse\SyntaxError;
 use text\sql\statement\{UseDatabase, Select, Number, Text, Field, Literal, Table};
+use text\sql\{Parser, SyntaxError};
 use unittest\Assert;
 
 class ParserTest {
