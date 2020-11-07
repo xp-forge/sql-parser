@@ -25,8 +25,8 @@ $statement= $p->parse('select * from user where user_id = 1');
 // )
 ```
 
-Parses
-------
+Support
+-------
 This library is not yet complete. Currently, the following are supported:
 
 * USE database selection
@@ -34,4 +34,29 @@ This library is not yet complete. Currently, the following are supported:
 * CREATE / DROP TABLE schema modification
 * ALTER TABLE ADD / DROP COLUMN table modification
 
-Other statements may be added via `extend()`.
+Other statements may be added via `extend()`:
+
+```php
+use text\sql\Parser;
+
+$p= new Parser();
+
+// Incomplete implementation of https://dev.mysql.com/doc/refman/8.0/en/show.html
+$p->extend('show', function($parse, $token) {
+  return ['show' => $parse->match([
+    'events'    => function($parse, $token) { return 'events'; },
+    'variables' => function($parse, $token) {
+      if ('like' === $parse->token->symbol->id) {
+        $parse->forward();
+        return ['variables' => $parse->expression()];
+      } else {
+        return ['variables' => null];
+      }
+    }
+  ])];
+});
+
+$statement= $p->parse('show variables like "sql_mode"');
+
+// ['show' => ['variables' => new Text('sql_mode')]]
+```
