@@ -1,10 +1,35 @@
 <?php namespace text\sql;
 
 use text\sql\parse\{State, Tokens, Symbol, Expecting};
-use text\sql\statement\{Comparison, Binary, AllOf, EitherOf, Call, Values, Order};
-use text\sql\statement\{CreateTable, AlterTable, DropTable, AddColumn, DropColumn, Column};
-use text\sql\statement\{Number, Text, Field, Literal, Table, Variable, System, Alias, All};
-use text\sql\statement\{Select, Insert, Update, Delete, UseDatabase};
+use text\sql\statement\{
+  AddColumn,
+  Alias,
+  All,
+  AllOf,
+  AlterTable,
+  Binary,
+  Call,
+  Column,
+  Comparison,
+  CreateTable,
+  Delete,
+  DropColumn,
+  DropTable,
+  EitherOf,
+  Field,
+  Insert,
+  Literal,
+  Number,
+  Order,
+  Select,
+  System,
+  Table,
+  Text,
+  Update,
+  UseDatabase,
+  Values,
+  Variable
+};
 
 class Parser {
   public $symbols= [];
