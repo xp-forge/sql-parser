@@ -14,9 +14,14 @@ Examples
 
 ```php
 use text\sql\Parser;
+use text\sql\parse\SyntaxError;
 
 $p= new Parser();
-$statement= $p->parse('select * from user where user_id = 1');
+try {
+  $statement= $p->parse('select * from user where user_id = 1');
+} catch (SyntaxError $e) {
+  // Handle
+}
 
 // new Select(
 //   [new All()],
