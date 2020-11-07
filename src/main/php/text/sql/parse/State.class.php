@@ -52,7 +52,7 @@ class State {
    */
   public function expect($token) {
     if ($token !== $this->token->value) {
-      throw new Expecting('Expecting '.$token.', have '.$this->token->name());
+      throw new Expecting($token, $this->token);
     }
     $this->forward();
   }
@@ -78,10 +78,7 @@ class State {
   public function match($cases) {
     $t= $this->token;
     if (null === ($f= $cases[$t->value] ?? null)) {
-      $tokens= array_keys($cases);
-      $last= array_pop($tokens);
-      $expected= empty($tokens) ? $last : 'one of '.implode(', ', $tokens).' or '.$last;
-      throw new Expecting('Expecting '.$expected.', have '.$t->name());
+      throw new Expecting(array_keys($cases), $t);
     }
 
     $this->forward();
@@ -97,7 +94,7 @@ class State {
     $name= '';
     do {
       if ('name' !== $this->token->symbol->id) {
-        throw new Expecting('Expecting a name, have '.$this->token->name());
+        throw new Expecting('a name', $this->token);
       }
 
       $name.= $this->token->value;
@@ -149,7 +146,7 @@ class State {
     if (';' === $this->token->value) {
       $this->forward();
     } else if (null !== $this->token->value) {
-      throw new Expecting('Expecting ; or (eof), have '.$this->token->name());
+      throw new Expecting('; or (eof)', $this->token);
     }
     return $expr;
   }
