@@ -401,18 +401,37 @@ class Parser {
     };
 
     // Disambiguate the following:
-    // - field
-    // - alias.field
-    // - alias.*
-    // - function()
-    // Not done via operators, these cannot be chained (`x.y.z`, `a.*.*` or `f()()`)!
+    // - `name`   -> a field
+    // - `name.*` -> all fields
+    // - `name()` -> a function
+    //
+    // Not done via operators, these cannot be chained (`y().z`, `a.*.*` or `f()()`)!
     $this->symbol('name')->nud= function($parse, $token) {
+      $name= [$token->value];
+
+      // Allow database..table but not database..table..field!
+      if ('..' === $parse->token->value) {
+        $parse->forward();
+        $name[]= null;
+        $name[]= $parse->token->value;
+        $parse->forward();
+      }
+
+      name:
       if ('.' === $parse->token->value) {
         $parse->forward();
-        $name= $parse->token->value;
+
+        if ('*' === $parse->token->value) {
+          $parse->forward();
+          return new All(implode('.', $name));
+        }
+
+        $name[]= $parse->token->value;
         $parse->forward();
-        return '*' === $name ? new All($token->value) : new Field($token->value, $name);
-      } else if ('(' === $parse->token->value) {
+        goto name;
+      }
+
+      if ('(' === $parse->token->value) {
         $parse->forward();
         $arguments= [];
 
@@ -426,9 +445,10 @@ class Parser {
         }
 
         $parse->expect(')');
-        return new Call($token->value, $arguments);
+        return new Call(implode('.', $name), $arguments);
       } else {
-        return new Field(null, $token->value);
+        $field= array_pop($name);
+        return new Field($name ? implode('.', $name) : null, $field);
       }
     };
 
