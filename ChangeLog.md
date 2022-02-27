@@ -3,6 +3,10 @@ SQL parser change log
 
 ## ?.?.? / ????-??-??
 
+## 0.3.0 / 2022-02-27
+
+* Made compatible with XP 11 - @thekid
+
 ## 0.2.2 / 2020-11-10
 
 * Fixed fully qualified field names like `test.user.user_id` - @thekid
