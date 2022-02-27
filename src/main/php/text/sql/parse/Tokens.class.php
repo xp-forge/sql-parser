@@ -1,14 +1,15 @@
 <?php namespace text\sql\parse;
 
+use IteratorAggregate, Traversable;
 use io\streams\{InputStream, MemoryInputStream};
 use io\{Path, File};
 
 /**
  * Tokenize code.
  *
- * @test  xp://lang.ast.unittest.TokensTest
+ * @test  lang.ast.unittest.TokensTest
  */
-class Tokens implements \IteratorAggregate {
+class Tokens implements IteratorAggregate {
   const DELIMITERS = " \r\n\t'\$\"=,;.:?!(){}[]#+-*/|&^@%~<>`";
   const OPERATORS = [
     '<' => ['<=', '<<'],
@@ -56,8 +57,8 @@ class Tokens implements \IteratorAggregate {
     }
   }
 
-  /** @return php.Iterator */
-  public function getIterator() {
+  /** Iterates over all tokens */
+  public function getIterator(): Traversable {
     $buffer= '';
     $length= $offset= 0;
 
@@ -112,7 +113,7 @@ class Tokens implements \IteratorAggregate {
         if ('.' === ($t= $next(self::DELIMITERS))) {
           yield 'number' => [(float)($token.$t.$next(self::DELIMITERS)), $line];
         } else {
-          $offset-= strlen($t);
+          $offset-= strlen($t ?? '');
           yield 'number' => [(int)$token, $line];
         }
       } else if (isset(self::OPERATORS[$token])) {

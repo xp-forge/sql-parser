@@ -5,6 +5,9 @@ SQL parser change log
 
 ## 0.3.0 / 2022-02-27
 
+* Fixed getIterator() declaration warning, substr() string/null type
+  mismatch in PHP 8.2
+  (@thekid)
 * Made compatible with XP 11 - @thekid
 
 ## 0.2.2 / 2020-11-10
