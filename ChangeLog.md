@@ -3,6 +3,10 @@ SQL parser change log
 
 ## ?.?.? / ????-??-??
 
+## 0.4.0 / 2024-03-24
+
+* Made compatible with XP 12 - @thekid
+
 ## 0.3.0 / 2022-02-27
 
 * Fixed getIterator() declaration warning, substr() string/null type
